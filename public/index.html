@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>💖 Donate H0LLoWx</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Prompt", sans-serif;
+  background: radial-gradient(circle at top, #17204a, #0b1020);
+  color: #fff;
+
+display: flex;
+flex-direction: column;
+align-items: center;
+
+justify-content: flex-start; /* 🔥 สำคัญ */
+
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* CARD */
+.card {
+  width: 100%;
+  max-width: 420px;
+
+  background: rgba(20, 26, 53, 0.85);
+  backdrop-filter: blur(12px);
+
+  padding: 24px;
+  border-radius: 20px;
+
+  box-shadow: 0 0 40px rgba(105,234,255,0.15);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  animation: pop 0.4s ease;
+
+  /* 🔥 FIX CENTER CONTENT */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  box-sizing: border-box;
+}
+
+@keyframes pop {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+/* LABEL STYLE */
+label {
+  font-size: 12px;
+  opacity: 0.7;
+  margin: 6px 0 4px;
+  align-self: flex-start; /* ให้ label ชิดซ้าย */
+}
+
+
+/* INPUT */
+input, textarea {
+  width: 100%;
+  box-sizing: border-box;
+
+  margin: 6px 0 12px;
+  padding: 12px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+
+  background: rgba(30, 37, 74, 0.7);
+  color: #fff;
+
+  outline: none;
+  transition: 0.2s;
+
+  /* 🔥 FIX TEXT ALIGN */
+  text-align: center;
+}
+textarea#comment {
+  width: 100%;
+  box-sizing: border-box;
+
+  margin: 6px 0 12px;
+  padding: 12px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+
+  background: rgba(30, 37, 74, 0.7);
+  color: #fff;
+
+  font-size: 14px;
+  line-height: 1.4;
+
+  text-align: left;
+
+  resize: none;
+
+  min-height: 80px;
+  max-height: 180px;
+
+  overflow-y: auto;
+
+  white-space: pre-wrap;   /* 🔥 สำคัญมาก */
+  word-break: break-word;
+}
+
+input:focus, textarea:focus {
+  border-color: #69eaff;
+  box-shadow: 0 0 10px #69eaff33;
+}
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+
+  background: linear-gradient(90deg, #47b3ff, #69eaff);
+  font-weight: bold;
+  cursor: pointer;
+
+  transition: 0.2s;
+
+  margin-top: 6px;
+}
+
+button:hover {
+  transform: scale(1.03);
+}
+
+
+/* QR */
+#qr-box {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+#qr-box img {
+  width: 240px;
+  border-radius: 14px;
+  border: 2px solid #69eaff;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* STATUS */
+#status {
+  margin-top: 12px;
+  font-size: 14px;
+  opacity: 0.9;
+  text-align: center;
+}
+
+/* LOADING */
+#loader {
+  display: none;
+  margin-top: 10px;
+  opacity: 0.8;
+}
+
+/* POPUP */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(17, 26, 51, 0.95);
+  padding: 22px 28px;
+  border-radius: 16px;
+  border: 1px solid #69eaff;
+  display: none;
+  text-align: center;
+  z-index: 9999;
+  box-shadow: 0 0 30px #69eaff55;
+  animation: pop 0.3s ease;
+}
+
+/* TIMER */
+#timer {
+  color: #69eaff;
+  font-weight: bold;
+}
+
+/* MOBILE */
+@media (max-width: 500px) {
+  .card {
+    padding: 18px;
+  }
+}
+.live-box {
+  margin: 10px 0;
+  padding: 10px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 12px;
+  font-size: 13px;
+  text-align: left;
+  max-height: 90px;
+  overflow: hidden;
+}
+
+.live-item {
+  opacity: 0.9;
+  animation: fadeIn 0.4s ease;
+}
+.navbar-pro {
+  display: flex;
+  gap: 10px;
+  padding: 10px 16px;
+
+  background: rgba(10, 15, 40, 0.9);
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 0 30px rgba(0,100,255,0.2);
+
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-item {
+  padding: 8px 14px;
+  border-radius: 999px;
+
+  font-size: 14px;
+  opacity: 0.8;
+
+  transition: 0.25s;
+
+  /* 🔥 FIX ลิงก์ */
+  text-decoration: none;
+  color: white;
+  display: inline-block;
+}
+
+.nav-item:hover {
+  background: rgba(255,255,255,0.08);
+  opacity: 1;
+}
+
+.nav-item.active {
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 0 12px rgba(105,234,255,0.4);
+  opacity: 1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar-pro">
+  <div class="nav-item active">🏠 หน้าแรก</div>
+  <div class="nav-item">🌐 Discovery</div>
+  <div class="nav-item">⚔️ Live Battle</div>
+  <div class="nav-item">📖 วิธีใช้งาน</div>
+  <div class="nav-item">💬 แผน</div>
+ <a href="contact.html" class="nav-item">📞 ติดต่อ</a>
+</div>
+
+<div class="card">
+  <h2>💖 Donate</h2>
+
+<div class="trust-bar">
+  <div class="badge">🔒 SSL Secured</div>
+  <div class="badge">⚡ Real-time</div>
+  <div class="badge">💳 PromptPay</div>
+</div>
+
+  <div class="live-box" id="liveBox">
+  <div class="live-item">💬 พร้อมรับโดเนทแบบเรียลไทม์</div>
+</div>
+
+<div style="margin-top:8px; font-size:11px; opacity:0.7;">
+🟢 ระบบเชื่อมต่อเซิร์ฟเวอร์แบบเรียลไทม์
+</div>
+
+
+
+  <label>ชื่อบนจอ</label>
+  <textarea id="msg" placeholder="Anonymous"></textarea>
+
+  <label>จำนวนเงิน</label>
+  <input id="amount" type="number" placeholder="0.00" />
+
+<label style="font-size:15px; font-weight:700; color:#69eaff; letter-spacing:0.3px;">
+💬 ข้อความ <span style="font-size:12px; opacity:0.7;">(พิมพ์ยาวได้ / ขึ้นบรรทัดใหม่)</span>
+</label>
+  <textarea id="comment" placeholder="ขอบคุณสำหรับโดเนท 💖"></textarea>
+
+  <button onclick="generateQR()">สร้าง QR พร้อมโดเนท</button>
+  <div style="margin-top:10px; font-size:12px; opacity:0.85;">
+  💰 ยอดโดเนทรวมวันนี้: <span id="totalDonate">0</span> บาท
+</div>
+
+  <div id="loader">🕓 กำลังสร้าง QR...</div>
+  <div id="qr-box"></div>
+  <div id="status"></div>
+</div>
+
+<!-- POPUP -->
+<div id="popup" class="popup">
+  💖 ขอบคุณสำหรับการสนับสนุน!
+  
+</div>
+
+<script>
+let ws;
+let countdown;
+
+function connectWS() {
+  ws = new WebSocket(
+    (location.protocol === "https:" ? "wss://" : "ws://") +
+    location.host +
+    "/ws"
+  );
+
+  ws.onopen = () => console.log("WS connected");
+  ws.onclose = () => setTimeout(connectWS, 2000);
+
+ws.onmessage = (e) => {
+  let data;
+  try {
+    data = JSON.parse(e.data);
+  } catch {
+    return;
+  }
+
+  // ❌ ไม่เอา test / replay
+  if (data.type === "test_alert") return;
+  if (data.type === "replay_alert") return;
+
+  // ✅ เฉพาะเงินเข้า
+  if (data.type === "donate") {
+    addLive(data.name || "Anonymous", data.amount || 0);
+loadTotal(); // 🔥 อัปเดตยอดทันที
+    showPopup();
+    $("#status").html("✅ โดเนทสำเร็จ");
+    $("#qr-box").empty();
+    $("#loader").hide();
+    $("#amount,#msg,#comment").val("");
+    clearInterval(countdown);
+  }
+};
+}
+
+connectWS();
+loadTotal();
+
+async function generateQR() {
+  const amount = parseFloat($("#amount").val());
+const nameRaw = $("#msg").val().trim();
+const name = nameRaw === "" ? "Anonymous" : nameRaw;
+  const comment = $("#comment").val() || "";
+
+  if (!amount) return alert("ใส่จำนวนเงิน");
+
+  $("#loader").show();
+  $("#status").html("🕓 กำลังสร้าง...");
+  $("#qr-box").empty();
+
+  try {
+    const res = await fetch("/generateQR", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount, name, comment })
+    });
+
+    const data = await res.json();
+
+    $("#loader").hide();
+    $("#qr-box").html(`<img src="${data.result}">`);
+
+    $("#status").html(`⏳ หมดเวลา <b id="timer">05:00</b>`);
+    startTimer(300);
+
+  } catch (err) {
+    $("#status").html("❌ error");
+    $("#loader").hide();
+  }
+}
+
+function startTimer(sec) {
+  let time = sec;
+  clearInterval(countdown);
+
+  countdown = setInterval(() => {
+    time--;
+
+    const m = String(Math.floor(time / 60)).padStart(2,"0");
+    const s = String(time % 60).padStart(2,"0");
+
+    const el = document.getElementById("timer");
+    if (el) el.innerText = `${m}:${s}`;
+
+    if (time <= 0) {
+      clearInterval(countdown);
+      $("#status").html("⏰ หมดเวลา");
+      $("#qr-box").empty();
+    }
+  }, 1000);
+}
+
+function showPopup() {
+  const p = document.getElementById("popup");
+  p.style.display = "block";
+  setTimeout(() => p.style.display = "none", 3000);
+}
+
+const msgInput = document.getElementById("msg");
+
+// default value
+msgInput.value = "Anonymous";
+
+// จำกัดภาษาอังกฤษ + 9 ตัวอักษร
+msgInput.addEventListener("input", function () {
+  let value = msgInput.value;
+
+  // 🔥 เอาเฉพาะ A-Z a-z
+  value = value.replace(/[^a-zA-Z]/g, "");
+
+  // 🔥 จำกัด 9 ตัว
+  if (value.length > 9) {
+    value = value.slice(0, 9);
+  }
+
+  msgInput.value = value;
+});
+
+async function loadTotal() {
+  try {
+    const res = await fetch("/donates.json");
+    const data = await res.json();
+
+    // เอาเฉพาะ “วันนี้”
+    const today = new Date().toDateString();
+
+    const total = data
+      .filter(d => new Date(d.time).toDateString() === today)
+      .reduce((sum, d) => sum + Number(d.amount || 0), 0);
+
+    document.getElementById("totalDonate").innerText = total;
+  } catch (err) {
+    console.log("❌ load total error", err);
+  }
+}
+function addLive(name, amount){
+  const box = document.getElementById("liveBox");
+  const item = document.createElement("div");
+  item.className = "live-item";
+  item.innerHTML = `💖 ${name} โดเนท ${amount} บาท`;
+
+  box.prepend(item);
+
+  if(box.children.length > 5){
+    box.removeChild(box.lastChild);
+  }
+} 
+
+function openContact(){
+  const p = document.getElementById("contactPopup");
+  p.style.display = "block";
+  setTimeout(() => p.style.display = "none", 4000);
+}
+</script>
+
+<div id="contactPopup" class="popup">
+  📩 ติดต่อเรา<br><br>
+  📘 Facebook: yourpage <br>
+  💬 Discord: yourname#0000 <br>
+  📧 Email: your@email.com
+</div>
+
+</body>
+</html>

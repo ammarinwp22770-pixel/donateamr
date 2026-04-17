@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Permissions-Policy" content="autoplay=*">
+<title>💖 Alert System</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  background: transparent;
+  font-family: "Prompt", sans-serif;
+  color: white;
+}
+
+.alert {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #0b1020;
+  border: 2px solid #69eaff;
+  border-radius: 20px;
+  padding: 30px 50px;
+  text-align: center;
+  box-shadow: 0 0 40px #69eaff;
+  animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+  from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+@keyframes fade {
+  to { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+}
+
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #69eaff;
+}
+</style>
+</head>
+
+<body>
+
+<script>
+let unlocked = false;
+
+// =========================
+// 🔊 UNLOCK AUDIO
+// =========================
+function unlock() {
+  if (unlocked) return;
+  unlocked = true;
+
+  const u = new SpeechSynthesisUtterance(" ");
+  speechSynthesis.speak(u);
+
+  const ctx = new AudioContext();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  gain.gain.value = 0;
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start();
+  osc.stop(ctx.currentTime + 0.1);
+}
+
+window.addEventListener("click", unlock);
+window.addEventListener("touchstart", unlock);
+
+// =========================
+// 🌐 WS CONNECT
+// =========================
+const ws = new WebSocket(
+  (location.protocol === "https:" ? "wss://" : "ws://") +
+  location.host + "/ws"
+);
+
+let queue = [];
+let playing = false;
+
+ws.onopen = () => console.log("🟢 WS Connected");
+
+// =========================
+// 📩 RECEIVE DATA
+// =========================
+ws.onmessage = (e) => {
+  try {
+    const data = JSON.parse(e.data);
+
+    if (!data) return;
+
+    if (data.type === "config_update") {
+      window.config = data.config;
+      return;
+    }
+
+    if (data.name && data.amount !== undefined) {
+      queue.push(data);
+      if (!playing) play();
+    }
+
+  } catch (err) {}
+};
+
+// =========================
+// ▶️ QUEUE SYSTEM
+// =========================
+async function play() {
+  if (!queue.length) {
+    playing = false;
+    return;
+  }
+
+  playing = true;
+
+  const data = queue.shift();
+  await showAlert(data);
+
+  setTimeout(play, 600);
+}
+
+// =========================
+// 🔊 SOUND FIRST + TTS AFTER
+// =========================
+function playTTS(text) {
+  const url = "/tts?text=" + encodeURIComponent(text);
+
+  const audio = new Audio(url);
+  audio.volume = 1;
+  audio.play().catch(err => console.log("TTS ERROR", err));
+}
+
+// =========================
+// 🎬 SHOW ALERT
+// =========================
+async function showAlert(data) {
+  return new Promise((resolve) => {
+
+    const cfg = window.config || {};
+
+    const textToSpeak =
+      `ขอบคุณ ${data.name} ${data.amount} บาท` +
+      (data.comment ? ` ${data.comment}` : "");
+
+    const box = document.createElement("div");
+    box.className = "alert";
+    box.style.borderColor = cfg.color || "#69eaff";
+
+    box.innerHTML = `
+      <div style="font-size:28px">💖 ขอบคุณ ${data.name}</div>
+      <div style="font-size:24px">${data.amount} บาท</div>
+      <div style="font-size:18px; opacity:0.8">${data.comment || ""}</div>
+    `;
+
+    document.body.appendChild(box);
+
+    const sound = new Audio(cfg.sound || "/alert.mp3");
+    sound.volume = 1;
+
+    let done = false;
+
+    const finish = () => {
+      if (done) return;
+      done = true;
+
+      speechSynthesis.cancel();
+
+      // 🔥 สำคัญ: delay นิดเดียวให้เสียงไม่ตีกัน
+      setTimeout(() => {
+        playTTS(textToSpeak);
+      }, 150);
+
+      resolve();
+    };
+
+    sound.play()
+      .then(() => {
+        sound.onended = finish;
+      })
+      .catch(() => finish());
+
+    setTimeout(finish, 5000);
+
+    // particles
+    for (let i = 0; i < 15; i++) {
+      const p = document.createElement("div");
+      p.className = "particle";
+      document.body.appendChild(p);
+
+      const x = (Math.random() - 0.5) * 400;
+      const y = (Math.random() - 0.5) * 300;
+
+      p.animate([
+        { transform: "translate(0,0)", opacity: 1 },
+        { transform: `translate(${x}px,${y}px)`, opacity: 0 }
+      ], { duration: 1200 });
+
+      setTimeout(() => p.remove(), 1200);
+    }
+
+    setTimeout(() => {
+      box.style.animation = "fade 0.8s forwards";
+      setTimeout(() => box.remove(), 800);
+    }, 3500);
+  });
+}
+</script>
+
+</body>
+</html>

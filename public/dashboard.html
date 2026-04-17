@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>💖 Donation Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: "Prompt", sans-serif;
+  background: #0b1020;
+  color: white;
+}
+
+.header {
+  padding: 20px;
+  border-bottom: 1px solid #1f2a44;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container {
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.card {
+  background: #111a2e;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  border: 1px solid #1f2a44;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.amount {
+  color: #69eaff;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.small {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+button {
+  background: #69eaff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* PAGINATION */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #1f2a44;
+  background: #111a2e;
+  color: white;
+  cursor: pointer;
+}
+
+.page-btn.active {
+  background: #69eaff;
+  color: black;
+}
+.summary-box {
+  background: #111a2e;
+  border: 1px solid #1f2a44;
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 15px;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+
+  font-weight: bold;
+  color: #69eaff;
+}
+.summary-item {
+  text-align: center;
+  flex: 1;
+}
+.summary-item div:first-child {
+  font-size: 12px;
+  opacity: 0.7;
+  color: white;
+}
+.summary-item div:last-child {
+  font-size: 16px;
+  margin-top: 4px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div>
+    💖 Donation Dashboard
+    <div class="small">Pagination + Sorted</div>
+  </div>
+
+<div class="container" style="padding-bottom:0;">
+  <div id="summary" class="summary-box"></div>
+</div>
+
+  <button onclick="load()">🔄 Refresh</button>
+</div>
+
+<div class="container" style="padding-bottom:0;">
+  <div id="summary" class="summary-box"></div>
+</div>
+
+<div class="container" id="list"></div>
+<div class="pagination" id="pagination"></div>
+
+<script>
+const list = document.getElementById("list");
+const pagination = document.getElementById("pagination");
+
+let dataCache = [];
+let currentPage = 1;
+const perPage = 10;
+
+async function load() {
+  try {
+    const res = await fetch("/donates.json?t=" + Date.now());
+    const data = await res.json();
+
+    dataCache = data.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+    currentPage = 1;
+
+    render();
+    renderSummary(); // 🔥 live update
+
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+function render() {
+  list.innerHTML = "";
+
+const start = (currentPage - 1) * perPage;
+const end = start + perPage;
+const pageData = dataCache.slice(start, end);
+
+  if (pageData.length === 0) {
+    list.innerHTML = "ไม่มีโดเนท";
+    return;
+  }
+
+  pageData.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
+      <div style="flex:1">
+        <div class="name">👤 ${item.name}</div>
+        <div class="small">💬 ${item.comment || "-"}</div>
+        <div class="small">🕒 ${new Date(item.time).toLocaleString("th-TH")}</div>
+      </div>
+
+      <div style="text-align:right">
+        <div class="amount">💰 ${item.amount} ฿</div>
+        <button>🔁 Replay</button>
+      </div>
+    `;
+
+    div.querySelector("button").onclick = async () => {
+      await fetch("/replay", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(item)
+      });
+    };
+
+    list.appendChild(div);
+  });
+
+  renderPagination();
+}
+
+function renderPagination() {
+  pagination.innerHTML = "";
+
+ const totalPages = Math.ceil(dataCache.length / perPage);
+
+  function btn(text, page, active = false) {
+    const b = document.createElement("button");
+    b.className = "page-btn" + (active ? " active" : "");
+    b.textContent = text;
+    b.onclick = () => {
+      currentPage = page;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    return b;
+  }
+
+  // prev
+  if (currentPage > 1) {
+    pagination.appendChild(btn("⬅", currentPage - 1));
+  }
+
+  // pages
+  for (let i = 1; i <= totalPages; i++) {
+    pagination.appendChild(btn(i, i, i === currentPage));
+  }
+
+  // next
+  if (currentPage < totalPages) {
+    pagination.appendChild(btn("➡", currentPage + 1));
+  }
+}
+
+function isToday(time) {
+  const d = new Date(time);
+  const now = new Date();
+
+  return (
+    d.getDate() === now.getDate() &&
+    d.getMonth() === now.getMonth() &&
+    d.getFullYear() === now.getFullYear()
+  );
+}
+
+function renderSummary() {
+  const todayData = dataCache.filter(item => isToday(item.time));
+
+  const total = todayData.reduce((sum, item) => {
+    return sum + (parseFloat(item.amount) || 0);
+  }, 0);
+
+  const count = todayData.length;
+
+  const top = todayData.reduce((max, item) => {
+    const amt = parseFloat(item.amount) || 0;
+    return amt > max ? amt : max;
+  }, 0);
+
+  document.getElementById("summary").innerHTML = `
+    <div class="summary-item">
+      <div>💰 TODAY</div>
+      <div>${total} ฿</div>
+    </div>
+
+    <div class="summary-item">
+      <div>👥 DONATE</div>
+      <div>${count}</div>
+    </div>
+
+    <div class="summary-item">
+      <div>🔥 TOP TODAY</div>
+      <div>${top} ฿</div>
+    </div>
+  `;
+}
+
+load();
+
+
+</script>
+
+</body>
+</html>

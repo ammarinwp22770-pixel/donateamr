@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>📞 Contact</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap" rel="stylesheet"/>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Prompt", sans-serif;
+  background: radial-gradient(circle at top, #17204a, #0b1020);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+/* NAVBAR */
+.navbar-pro {
+  display: flex;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba(10, 15, 40, 0.9);
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 0 30px rgba(0,100,255,0.2);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-item {
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  opacity: 0.8;
+  transition: 0.25s;
+  text-decoration: none;
+  color: white;
+  display: inline-block;
+}
+
+.nav-item:hover {
+  background: rgba(255,255,255,0.08);
+  opacity: 1;
+}
+
+.nav-item.active {
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 0 12px rgba(105,234,255,0.4);
+  opacity: 1;
+}
+
+/* CARD */
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(20, 26, 53, 0.85);
+  padding: 24px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(105,234,255,0.15);
+  animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* CONTACT BOX */
+.contact-item {
+  background: rgba(255,255,255,0.05);
+  padding: 12px;
+  border-radius: 12px;
+  margin: 10px 0;
+  transition: 0.25s;
+}
+
+.contact-item:hover {
+  background: rgba(255,255,255,0.1);
+  transform: scale(1.02);
+}
+
+/* BUTTON */
+.btn {
+  display: block;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #47b3ff, #69eaff);
+  color: #000;
+  font-weight: bold;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar-pro">
+  <a href="index.html" class="nav-item">🏠 หน้าแรก</a>
+  <div class="nav-item">🌐 Discovery</div>
+  <div class="nav-item">⚔️ Live Battle</div>
+  <div class="nav-item">📖 วิธีใช้งาน</div>
+  <div class="nav-item">💬 แผน</div>
+  <div class="nav-item active">📞 ติดต่อ</div>
+</div>
+
+<!-- CONTENT -->
+<div class="card">
+  <h2>📞 ติดต่อเรา</h2>
+
+  <div class="contact-item">
+    📘 Facebook<br>
+    <a href="https://www.facebook.com/AMR29.official" class="btn">ไปที่เพจ</a>
+  </div>
+
+  <div class="contact-item">
+    💬 Discord<br>
+    <a href="#" class="btn">เข้าร่วม</a>
+  </div>
+
+  <div class="contact-item">
+    📧 Email<br>
+    <a href="#" class="btn">ส่งอีเมล</a>
+  </div>
+</div>
+
+</body>
+</html>
