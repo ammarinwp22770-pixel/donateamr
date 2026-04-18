@@ -507,15 +507,12 @@ button:hover::before {
 
 <div class="navbar-pro">
   <div class="nav-item active">🏠 หน้าแรก</div>
-  <div class="nav-item">🌐 Discovery</div>
-  <div class="nav-item">⚔️ Live Battle</div>
   <div class="nav-item">📖 วิธีใช้งาน</div>
-  <div class="nav-item">💬 แผน</div>
  <a href="contact.html" class="nav-item">📞 ติดต่อ</a>
 </div>
 
 <div class="card">
-  <h2>💖 Donate</h2>
+  <h2>สนับสนุน AMR29💖</h2>
 
 <div class="trust-bar">
   <div class="badge">🔒 SSL Secured</div>
@@ -538,6 +535,10 @@ button:hover::before {
 
   <label>จำนวนเงิน</label>
   <input id="amount" type="number" placeholder="0.00" />
+
+<div style="margin-top:6px; font-size:12px; opacity:0.75; color:#69eaff;">
+⚠️ ระบบรับโดเนทขั้นต่ำ 10 บาท
+</div>
 
 <label style="font-size:15px; font-weight:700; color:#69eaff; letter-spacing:0.3px;">
 💬 ข้อความ <span style="font-size:12px; opacity:0.7;">(พิมพ์ยาวได้ / ขึ้นบรรทัดใหม่)</span>
@@ -605,11 +606,23 @@ loadTotal();
 
 async function generateQR() {
   const amount = parseFloat($("#amount").val());
-const nameRaw = $("#msg").val().trim();
-const name = nameRaw === "" ? "Anonymous" : nameRaw;
+  const nameRaw = $("#msg").val().trim();
+  const name = nameRaw === "" ? "Anonymous" : nameRaw;
   const comment = $("#comment").val() || "";
 
-  if (!amount) return alert("ใส่จำนวนเงิน");
+  // ❌ เช็คขั้นต่ำ 10 บาท
+if (!amount || amount < 10) {
+  const p = document.getElementById("popup");
+  p.innerHTML = "⚠️ ขั้นต่ำโดเนท 10 บาท 💖";
+  p.classList.add("show");
+
+  setTimeout(() => {
+    p.classList.remove("show");
+    p.innerHTML = "💖 ขอบคุณสำหรับการสนับสนุน!";
+  }, 2500);
+
+  return;
+}
 
   $("#loader").show();
   $("#status").html("🕓 กำลังสร้าง...");
