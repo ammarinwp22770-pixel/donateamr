@@ -72,10 +72,38 @@ app.post("/test-alert", (req, res) => {
 // =========================
 const wss = new WebSocketServer({ server, path: "/ws" });
 
-wss.on("connection", () => {
+wss.on("connection", (ws) => {
+  ws.isAlive = true;
+
+  ws.on("pong", () => {
+    ws.isAlive = true;
+  });
+
   console.log("🟢 OBS CONNECTED");
-  console.log("📺 WebSocket client linked");
-  console.log("⏳ Ready to push donation alerts...");
+});
+
+setInterval(() => {
+  wss.clients.forEach(ws => {
+    if (ws.isAlive === false) return ws.terminate();
+
+    ws.isAlive = false;
+    ws.ping();
+  });
+}, 30000);
+
+
+
+
+wss.on("connection", (ws) => {
+  console.log("🟢 CLIENT CONNECTED");
+
+  ws.on("close", () => {
+    console.log("🔴 CLIENT DISCONNECTED");
+  });
+
+  ws.on("error", (err) => {
+    console.log("⚠️ WS ERROR:", err);
+  });
 });
 
 function broadcast(data) {
@@ -392,6 +420,10 @@ app.get("/messages", (req, res) => {
   if (!fs.existsSync(file)) return res.json([]);
   const data = JSON.parse(fs.readFileSync(file));
   res.json(data);
+});
+
+app.get("/ping", (req, res) => {
+  res.send("ok");
 });
 
 
