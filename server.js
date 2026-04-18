@@ -282,10 +282,7 @@ console.log("💵 Amount:", amount);
   if (processing) return res.json({ ok: true });
   processing = true;
 
-  import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-
-const admin = require("firebase-admin");
+import admin from "firebase-admin";
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_KEY);
 
