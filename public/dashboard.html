@@ -37,6 +37,20 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  /* ✨ เพิ่มอันนี้ */
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .name {
@@ -128,10 +142,6 @@ button:hover {
     <div class="small">Pagination + Sorted</div>
   </div>
 
-<div class="container" style="padding-bottom:0;">
-  <div id="summary" class="summary-box"></div>
-</div>
-
   <button onclick="load()">🔄 Refresh</button>
 </div>
 
@@ -150,21 +160,21 @@ let dataCache = [];
 let currentPage = 1;
 const perPage = 10;
 
+let lastJSON = "";
+
 async function load() {
-  try {
-    const res = await fetch("/donates.json?t=" + Date.now());
-    const data = await res.json();
+  const res = await fetch("/donates.json?t=" + Date.now());
+  const text = await res.text();
 
-    dataCache = data.sort((a, b) => new Date(b.time) - new Date(a.time));
+  if (text === lastJSON) return; // ❌ ไม่เปลี่ยน = ไม่ render ใหม่
 
-    currentPage = 1;
+  lastJSON = text;
 
-    render();
-    renderSummary(); // 🔥 live update
+  const data = JSON.parse(text);
+  dataCache = data.sort((a, b) => new Date(b.time) - new Date(a.time));
 
-  } catch (err) {
-    console.log(err);
-  }
+  render();
+  renderSummary();
 }
 
 function render() {
