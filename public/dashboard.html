@@ -1,25 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAfu0s5nUekPdpznTMmDixQG3Zc1QdJMWw",
-  authDomain: "donateamr.firebaseapp.com",
-  databaseURL: "https://donateamr-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "donateamr",
-  storageBucket: "donateamr.firebasestorage.app",
-  messagingSenderId: "876141128290",
-  appId: "1:876141128290:web:c91cbb631fd90dbe2f3f3b"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-</script>
-
 <meta charset="UTF-8">
 <title>💖 Donation Dashboard</title>
 
@@ -184,15 +165,18 @@ const perPage = 10;
 let lastJSON = "";
 
 async function load() {
-db.ref("donates").on("value", (snap) => {
-  const data = snap.val() || {};
+  const res = await fetch("/donates.json?t=" + Date.now());
+  const text = await res.text();
 
-  dataCache = Object.values(data)
-    .sort((a,b) => new Date(b.time) - new Date(a.time));
+  if (text === lastJSON) return; // ❌ ไม่เปลี่ยน = ไม่ render ใหม่
+
+  lastJSON = text;
+
+  const data = JSON.parse(text);
+  dataCache = data.sort((a, b) => new Date(b.time) - new Date(a.time));
 
   render();
   renderSummary();
-});
 }
 
 function render() {

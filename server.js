@@ -8,18 +8,8 @@ import multer from "multer";
 import http from "http";
 import path from "path";
 import axios from "axios";
-import admin from "firebase-admin";
+
 const app = express();
-
-const serviceAccount = JSON.parse(process.env.FIREBASE_KEY);
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://donateamr-default-rtdb.asia-southeast1.firebasedatabase.app"
-});
-
-const db = admin.database();
-
 const server = http.createServer(app);
 
 // =========================
@@ -292,12 +282,23 @@ console.log("💵 Amount:", amount);
   if (processing) return res.json({ ok: true });
   processing = true;
 
-db.ref("donates").push({
-  name: found.name,
-  amount,
-  comment: found.comment || "",
-  time: Date.now()
-});
+  const db = JSON.parse(fs.readFileSync(donateFile));
+
+  db.unshift({
+    name: found.name,
+    amount,
+    comment: found.comment,
+    time: new Date().toISOString()
+  });
+
+  fs.writeFileSync(donateFile, JSON.stringify(db, null, 2));
+
+  push({
+    type: "donate",
+    name: found.name,
+    amount,
+    comment: found.comment || ""
+  });
 
   pending = pending.filter(p => p.id !== found.id);
 
