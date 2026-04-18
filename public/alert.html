@@ -20,23 +20,97 @@ body {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  background: #0b1020;
-  border: 2px solid #69eaff;
-  border-radius: 20px;
-  padding: 30px 50px;
+  transform: translate(-50%, -50%) scale(0.6);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  padding: 28px 42px;
+
+  /* 🎨 glass premium */
+  background: rgba(10, 15, 35, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border-radius: 24px;
+
+  border: 1px solid rgba(105, 234, 255, 0.25);
+
+  /* ✨ neon glow layered */
+  box-shadow:
+    0 0 20px rgba(105,234,255,0.2),
+    0 0 60px rgba(0,150,255,0.15),
+    inset 0 0 12px rgba(255,255,255,0.05);
+
   text-align: center;
-  box-shadow: 0 0 40px #69eaff;
-  animation: pop 0.4s ease;
+
+  animation: popWOW 0.55s cubic-bezier(.2,1.2,.3,1) forwards;
+
+  z-index: 9999;
 }
 
-@keyframes pop {
-  from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
-  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+@keyframes popWOW {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 0;
+    filter: blur(8px);
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(1.12);
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* ✨ fade out */
+@keyframes fade {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+}
+
+/* 💖 hover glow (ถ้าต้องการ future use) */
+.alert:hover {
+  box-shadow:
+    0 0 30px rgba(105,234,255,0.35),
+    0 0 90px rgba(0,150,255,0.2);
 }
 
 @keyframes fade {
   to { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+}
+
+/* 💖 TEXT */
+.alert .name {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(105,234,255,0.5);
+}
+
+.alert .amount {
+  font-size: 22px;
+  color: #69eaff;
+  font-weight: 700;
+}
+
+.alert .comment {
+  font-size: 16px;
+  opacity: 0.85;
+}
+
+/* 🎉 WOW GIF */
+.alert img {
+  width: 140px;
+  height: auto;
+  margin-top: 6px;
+  filter: drop-shadow(0 0 10px rgba(105,234,255,0.5));
 }
 
 .particle {
@@ -159,11 +233,13 @@ async function showAlert(data) {
     box.className = "alert";
     box.style.borderColor = cfg.color || "#69eaff";
 
-    box.innerHTML = `
-      <div style="font-size:28px">💖 ขอบคุณ ${data.name}</div>
-      <div style="font-size:24px">${data.amount} บาท</div>
-      <div style="font-size:18px; opacity:0.8">${data.comment || ""}</div>
-    `;
+box.innerHTML = `
+ <img src="/uploads/WOW.gif">
+
+  <div class="name">💖 ขอบคุณ ${data.name}</div>
+  <div class="amount">${data.amount} บาท</div>
+  <div class="comment">${data.comment || ""}</div>
+`;
 
     document.body.appendChild(box);
 
