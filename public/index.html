@@ -483,12 +483,36 @@ function openContact(){
 }
 </script>
 
-<div id="contactPopup" class="popup">
-  📩 ติดต่อเรา<br><br>
-  📘 Facebook: yourpage <br>
-  💬 Discord: yourname#0000 <br>
-  📧 Email: your@email.com
-</div>
+<script>
+// ❌ ปิดคลิกขวา
+document.addEventListener("contextmenu", function (e) {
+  e.preventDefault();
+});
+
+// ❌ ปิดปุ่ม inspect / devtools shortcut
+document.addEventListener("keydown", function (e) {
+  // F12
+  if (e.key === "F12") {
+    e.preventDefault();
+  }
+
+  // Ctrl + Shift + I / J / C
+  if (e.ctrlKey && e.shiftKey) {
+    if (
+      e.key.toLowerCase() === "i" ||
+      e.key.toLowerCase() === "j" ||
+      e.key.toLowerCase() === "c"
+    ) {
+      e.preventDefault();
+    }
+  }
+
+  // Ctrl + U (view source)
+  if (e.ctrlKey && e.key.toLowerCase() === "u") {
+    e.preventDefault();
+  }
+});
+</script>
 
 </body>
 </html>
