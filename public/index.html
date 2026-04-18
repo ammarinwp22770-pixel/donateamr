@@ -12,53 +12,103 @@
 body {
   margin: 0;
   font-family: "Prompt", sans-serif;
-  background: radial-gradient(circle at top, #17204a, #0b1020);
+
+  /* 🎨 พื้นหลังสวยขึ้น + มีมิติ */
+  background: radial-gradient(circle at top, #1b2a5a 0%, #0b1020 40%, #05060f 100%);
   color: #fff;
 
-display: flex;
-flex-direction: column;
-align-items: center;
-
-justify-content: flex-start; /* 🔥 สำคัญ */
+  /* ✨ จัดกลาง */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 
   min-height: 100vh;
-  padding: 20px;
+  padding: 24px;
   box-sizing: border-box;
+
+  /* ✨ เอฟเฟกต์เบา ๆ ให้ดูแพง */
+  overflow-x: hidden;
 }
+
+/* ✨ เพิ่มแสง background เบา ๆ */
+body::before {
+  content: "";
+  position: fixed;
+  top: -200px;
+  left: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(105,234,255,0.25), transparent 60%);
+  filter: blur(80px);
+  z-index: -1;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  bottom: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(71,179,255,0.18), transparent 60%);
+  filter: blur(90px);
+  z-index: -1;
+} 
 
 /* CARD */
 .card {
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
 
-  background: rgba(20, 26, 53, 0.85);
-  backdrop-filter: blur(12px);
+  /* 🎨 glass premium */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 
-  padding: 24px;
-  border-radius: 20px;
+  padding: 28px;
+  border-radius: 24px;
 
-  box-shadow: 0 0 40px rgba(105,234,255,0.15);
-  border: 1px solid rgba(255,255,255,0.08);
+  /* ✨ border glow */
+  border: 1px solid rgba(105, 234, 255, 0.15);
 
-  animation: pop 0.4s ease;
+  /* 🔥 shadow ลึก + neon */
+  box-shadow:
+    0 0 25px rgba(0, 180, 255, 0.08),
+    0 0 60px rgba(0, 120, 255, 0.12),
+    inset 0 0 20px rgba(255, 255, 255, 0.03);
 
-  /* 🔥 FIX CENTER CONTENT */
+  /* ✨ animation */
+  animation: pop 0.45s ease;
+
+  /* layout */
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 
   box-sizing: border-box;
+
+  /* ✨ hover ลอย */
+  transition: 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 35px rgba(0, 200, 255, 0.18),
+    0 0 80px rgba(0, 120, 255, 0.25);
 }
 
 @keyframes pop {
-  from { transform: scale(0.95); opacity: 0; }
+  from { transform: scale(0.96); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 
 h2 {
-  text-align: center;
-  margin-bottom: 18px;
+  margin: 0 0 10px;
+  font-size: 22px;
+  letter-spacing: 0.5px;
 }
 
 /* LABEL STYLE */
@@ -71,24 +121,55 @@ label {
 
 
 /* INPUT */
+/* ✨ INPUT / TEXTAREA (PRO UPGRADE) */
 input, textarea {
   width: 100%;
   box-sizing: border-box;
 
-  margin: 6px 0 12px;
-  padding: 12px;
+  margin: 8px 0 14px;
+  padding: 14px 14px;
 
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
 
-  background: rgba(30, 37, 74, 0.7);
+  /* 🎨 glass style */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
   color: #fff;
+  border: 1px solid rgba(105, 234, 255, 0.12);
 
   outline: none;
-  transition: 0.2s;
 
-  /* 🔥 FIX TEXT ALIGN */
-  text-align: center;
+  font-size: 14px;
+  transition: all 0.25s ease;
+
+  /* ❌ ไม่บังคับกลางแล้ว (ดูแพงขึ้น) */
+  text-align: left;
+
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+}
+
+/* ✨ hover */
+input:hover, textarea:hover {
+  border-color: rgba(105, 234, 255, 0.35);
+}
+
+/* ✨ focus (สำคัญสุด) */
+input:focus, textarea:focus {
+  border-color: #69eaff;
+
+  box-shadow:
+    0 0 0 3px rgba(105, 234, 255, 0.12),
+    0 0 20px rgba(105, 234, 255, 0.25);
+
+  transform: translateY(-1px);
+}
+
+/* ✨ placeholder */
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255,255,255,0.35);
 }
 textarea#comment {
   width: 100%;
@@ -119,28 +200,71 @@ textarea#comment {
   word-break: break-word;
 }
 
-input:focus, textarea:focus {
-  border-color: #69eaff;
-  box-shadow: 0 0 10px #69eaff33;
-}
 /* BUTTON */
 button {
   width: 100%;
-  padding: 12px;
-  border-radius: 12px;
+  padding: 14px;
+
+  border-radius: 14px;
   border: none;
 
-  background: linear-gradient(90deg, #47b3ff, #69eaff);
-  font-weight: bold;
+  /* 🎨 gradient หรูขึ้น */
+  background: linear-gradient(135deg, #3aa8ff, #69eaff, #4fd1ff);
+
+  color: #0b1020;
+  font-weight: 700;
+  font-size: 14px;
+
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
 
-  transition: 0.2s;
+  transition: all 0.25s ease;
 
-  margin-top: 6px;
+  margin-top: 8px;
+
+  /* ✨ glow เบา */
+  box-shadow: 0 0 18px rgba(105,234,255,0.25);
 }
 
+/* ✨ hover */
 button:hover {
-  transform: scale(1.03);
+  transform: translateY(-2px) scale(1.03);
+
+  box-shadow:
+    0 0 25px rgba(105,234,255,0.35),
+    0 0 60px rgba(71,179,255,0.2);
+}
+
+/* ✨ active (กดปุ่ม) */
+button:active {
+  transform: scale(0.98);
+}
+
+/* ✨ shine effect วิ่งผ่านปุ่ม */
+button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.35),
+    transparent
+  );
+  transform: skewX(-20deg);
+}
+
+button:hover::before {
+  animation: shine 0.7s ease;
+}
+
+@keyframes shine {
+  0% { left: -120%; }
+  100% { left: 120%; }
 }
 
 
@@ -152,10 +276,10 @@ button:hover {
 }
 
 #qr-box img {
-  width: 240px;
-  border-radius: 14px;
-  border: 2px solid #69eaff;
-  animation: fadeIn 0.4s ease;
+  width: 230px;
+  border-radius: 16px;
+  border: 2px solid rgba(105,234,255,0.6);
+  margin-top: 10px;
 }
 
 @keyframes fadeIn {
@@ -183,16 +307,63 @@ button:hover {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(17, 26, 51, 0.95);
-  padding: 22px 28px;
-  border-radius: 16px;
-  border: 1px solid #69eaff;
-  display: none;
+  transform: translate(-50%, -50%) scale(0.9);
+
+  /* 🎨 glass premium */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  padding: 18px 26px;
+  border-radius: 18px;
+
+  border: 1px solid rgba(105,234,255,0.25);
+
+  /* ✨ glow หลายชั้น */
+  box-shadow:
+    0 0 20px rgba(105,234,255,0.25),
+    0 0 60px rgba(0,150,255,0.15);
+
+  color: #fff;
   text-align: center;
+
   z-index: 9999;
-  box-shadow: 0 0 30px #69eaff55;
-  animation: pop 0.3s ease;
+
+  display: none;
+
+  /* ✨ animation นุ่มขึ้น */
+  opacity: 0;
+  transition: all 0.25s ease;
+}
+
+/* ✨ ตอนโชว์ */
+.popup.show {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* ✨ glow pulse เบา ๆ */
+@keyframes popupGlow {
+  0% {
+    box-shadow:
+      0 0 15px rgba(105,234,255,0.2),
+      0 0 40px rgba(0,150,255,0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 25px rgba(105,234,255,0.35),
+      0 0 70px rgba(0,150,255,0.2);
+  }
+  100% {
+    box-shadow:
+      0 0 15px rgba(105,234,255,0.2),
+      0 0 40px rgba(0,150,255,0.1);
+  }
+}
+
+.popup.show {
+  animation: popupGlow 1.5s infinite ease-in-out;
 }
 
 /* TIMER */
@@ -207,33 +378,88 @@ button:hover {
     padding: 18px;
   }
 }
+
+/* ✨ LIVE BOX (PRO STREAM FEED) */
 .live-box {
-  margin: 10px 0;
-  padding: 10px;
-  background: rgba(0,0,0,0.2);
-  border-radius: 12px;
+  width: 100%;
+  margin: 12px 0;
+  padding: 12px 12px;
+
+  /* 🎨 glass look */
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border-radius: 16px;
+  border: 1px solid rgba(105, 234, 255, 0.12);
+
   font-size: 13px;
   text-align: left;
-  max-height: 90px;
-  overflow: hidden;
+
+  max-height: 110px;
+  overflow-y: auto;
+
+  /* ✨ glow เบา */
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.25);
 }
 
+/* scrollbar สวยขึ้น */
+.live-box::-webkit-scrollbar {
+  width: 4px;
+}
+
+.live-box::-webkit-scrollbar-thumb {
+  background: rgba(105,234,255,0.4);
+  border-radius: 10px;
+}
+
+/* ✨ item */
 .live-item {
-  opacity: 0.9;
-  animation: fadeIn 0.4s ease;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+
+  border-radius: 10px;
+
+  background: rgba(0,0,0,0.15);
+
+  opacity: 0.95;
+
+  transition: 0.2s;
+
+  animation: fadeInUp 0.35s ease;
+}
+
+/* hover highlight */
+.live-item:hover {
+  background: rgba(105,234,255,0.08);
+  transform: translateX(3px);
+}
+
+/* ✨ animation เข้า */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .navbar-pro {
   display: flex;
-  gap: 10px;
-  padding: 10px 16px;
+  gap: 8px;
+  padding: 10px 14px;
 
-  background: rgba(10, 15, 40, 0.9);
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+
   border-radius: 999px;
-
   border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 0 30px rgba(0,100,255,0.2);
 
-  margin-bottom: 20px;
+  box-shadow: 0 0 25px rgba(0,150,255,0.15);
+
+  margin-bottom: 18px;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -242,27 +468,38 @@ button:hover {
   padding: 8px 14px;
   border-radius: 999px;
 
-  font-size: 14px;
-  opacity: 0.8;
+  font-size: 13px;
+  color: #cfe8ff;
+  text-decoration: none;
 
   transition: 0.25s;
-
-  /* 🔥 FIX ลิงก์ */
-  text-decoration: none;
-  color: white;
-  display: inline-block;
 }
 
 .nav-item:hover {
   background: rgba(255,255,255,0.08);
-  opacity: 1;
+  transform: translateY(-1px);
 }
 
 .nav-item.active {
-  background: rgba(255,255,255,0.12);
+  background: rgba(105,234,255,0.15);
   box-shadow: 0 0 12px rgba(105,234,255,0.4);
-  opacity: 1;
 }
+/* TRUST BADGE */
+.trust-bar {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #a9d7ff;
+}
+
 </style>
 </head>
 
@@ -422,8 +659,11 @@ function startTimer(sec) {
 
 function showPopup() {
   const p = document.getElementById("popup");
-  p.style.display = "block";
-  setTimeout(() => p.style.display = "none", 3000);
+  p.classList.add("show");
+
+  setTimeout(() => {
+    p.classList.remove("show");
+  }, 3000);
 }
 
 const msgInput = document.getElementById("msg");
