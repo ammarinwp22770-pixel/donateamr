@@ -282,16 +282,16 @@ console.log("💵 Amount:", amount);
   if (processing) return res.json({ ok: true });
   processing = true;
 
-  const db = JSON.parse(fs.readFileSync(donateFile));
+  import admin from "firebase-admin";
 
-  db.unshift({
-    name: found.name,
-    amount,
-    comment: found.comment,
-    time: new Date().toISOString()
-  });
+const serviceAccount = JSON.parse(process.env.FIREBASE_KEY);
 
-  fs.writeFileSync(donateFile, JSON.stringify(db, null, 2));
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://donateamr-default-rtdb.asia-southeast1.firebasedatabase.app"
+});
+
+const db = admin.database();
 
   push({
     type: "donate",
